@@ -1,8 +1,10 @@
+// Constants Start
 const API_URL = 'https://fakestoreapi.com';
 let cart = [];
 let allProducts = [];
+// Constants End
 
-// DOM Elements
+// DOM Elements Start
 const productGrid = document.getElementById('product-grid');
 const trendingGrid = document.getElementById('trending-products');
 const categoryContainer = document.getElementById('category-filters');
@@ -10,19 +12,18 @@ const cartCountElement = document.getElementById('cart-count');
 const productsSection = document.getElementById('products-section');
 const mobileMenuBtn = document.getElementById('mobile-menu-btn');
 const mobileMenu = document.getElementById('mobile-menu');
+// DOM Elements End
 
-// Event Listeners
+// Event Listeners Start
 document.addEventListener('DOMContentLoaded', () => {
     fetchCategories();
-    fetchTrendingProducts(); // Fetch limited products for specific section
-    fetchProducts('all'); // Initial fetch
+    fetchTrendingProducts();
+    fetchProducts('all');
 
-    // Mobile Menu Toggle
     mobileMenuBtn.addEventListener('click', () => {
         mobileMenu.classList.toggle('hidden');
     });
 
-    // Close modal on outside click
     window.onclick = function (event) {
         const modal = document.getElementById('product-modal');
         if (event.target == modal) {
@@ -31,7 +32,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Fetch Categories
+document.getElementById('cart-btn').addEventListener('click', toggleCart);
+// Event Listeners End
+
+// Fetch Functions Start
 async function fetchCategories() {
     try {
         const response = await fetch(`${API_URL}/products/categories`);
@@ -43,7 +47,6 @@ async function fetchCategories() {
             btn.innerText = category;
             btn.dataset.category = category;
             btn.onclick = () => {
-                // Handle active state
                 document.querySelectorAll('.category-btn').forEach(b => {
                     b.classList.remove('bg-primary', 'text-white', 'border-primary');
                     b.classList.add('border-gray-300');
@@ -56,7 +59,6 @@ async function fetchCategories() {
             categoryContainer.appendChild(btn);
         });
 
-        // Add event listener for 'All' button again to ensure it works
         const allBtn = document.querySelector('[data-category="all"]');
         allBtn.onclick = () => {
             document.querySelectorAll('.category-btn').forEach(b => {
@@ -72,11 +74,10 @@ async function fetchCategories() {
     }
 }
 
-// Fetch Products
 async function fetchProducts(category) {
     const loader = document.getElementById('products-loading');
     loader.classList.remove('hidden');
-    productGrid.innerHTML = ''; // Clear existing
+    productGrid.innerHTML = '';
 
     let url = `${API_URL}/products`;
     if (category !== 'all') {
@@ -86,7 +87,7 @@ async function fetchProducts(category) {
     try {
         const response = await fetch(url);
         const products = await response.json();
-        allProducts = products; // Store for local usage if needed
+        allProducts = products;
 
         loader.classList.add('hidden');
         displayProducts(products, productGrid);
@@ -98,20 +99,19 @@ async function fetchProducts(category) {
     }
 }
 
-// Fetch Trending (First 3 products for now)
 async function fetchTrendingProducts() {
     try {
         const response = await fetch(`${API_URL}/products?limit=3`);
         const products = await response.json();
         trendingGrid.innerHTML = '';
-        displayProducts(products, trendingGrid, true); // true for trending layout/flag if needed
+        displayProducts(products, trendingGrid, true);
     } catch (error) {
         console.error('Error fetching trending:', error);
     }
 }
+// Fetch Functions End
 
-
-// Display Products Helper
+// UI Functions Start
 function displayProducts(products, container, isTrending = false) {
     if (products.length === 0) {
         container.innerHTML = '<p class="text-center w-full col-span-4">No products found.</p>';
@@ -154,7 +154,6 @@ function displayProducts(products, container, isTrending = false) {
     });
 }
 
-// Generate Star Rating HTML
 function generateStars(rating) {
     let stars = '';
     for (let i = 1; i <= 5; i++) {
@@ -167,8 +166,24 @@ function generateStars(rating) {
     return stars;
 }
 
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'fixed bottom-4 right-4 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-xl z-[100] transform transition-all duration-300 translate-y-10 opacity-0 flex items-center gap-3';
+    toast.innerHTML = `<i class="fa-solid fa-check-circle text-green-400"></i> ${message}`;
+    document.body.appendChild(toast);
 
-// Add to Cart Logic
+    setTimeout(() => {
+        toast.classList.remove('translate-y-10', 'opacity-0');
+    }, 10);
+
+    setTimeout(() => {
+        toast.classList.add('translate-y-10', 'opacity-0');
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+// UI Functions End
+
+// Cart Logic Start
 function addToCart(productId) {
     let productInCart = cart.find(item => item.id === productId);
 
@@ -187,7 +202,6 @@ function addToCart(productId) {
             updateCartUI();
             showToast("Added to cart!");
         } else {
-            // Fallback fetch if somehow not found
             fetch(`${API_URL}/products/${productId}`)
                 .then(res => res.json())
                 .then(data => {
@@ -200,11 +214,8 @@ function addToCart(productId) {
 }
 
 function updateCartUI() {
-    // Update Count
     const totalCount = cart.reduce((sum, item) => sum + item.quantity, 0);
     cartCountElement.innerText = totalCount;
-
-    // Update Cart Sidebar List
     renderCartItems();
 }
 
@@ -214,7 +225,6 @@ function toggleCart() {
 
     if (sidebar.classList.contains('hidden')) {
         sidebar.classList.remove('hidden');
-        // Small delay to allow display block to apply before translation
         setTimeout(() => {
             panel.classList.remove('translate-x-full');
         }, 10);
@@ -225,9 +235,6 @@ function toggleCart() {
         }, 300);
     }
 }
-
-// Ensure cart button opens sidebar
-document.getElementById('cart-btn').addEventListener('click', toggleCart);
 
 function renderCartItems() {
     const container = document.getElementById('cart-items-container');
@@ -298,32 +305,13 @@ function removeFromCart(id) {
     cart = cart.filter(item => item.id !== id);
     updateCartUI();
 }
+// Cart Logic End
 
-// Toast Notification
-function showToast(message) {
-    const toast = document.createElement('div');
-    toast.className = 'fixed bottom-4 right-4 bg-gray-900 text-white px-6 py-3 rounded-lg shadow-xl z-[100] transform transition-all duration-300 translate-y-10 opacity-0 flex items-center gap-3';
-    toast.innerHTML = `<i class="fa-solid fa-check-circle text-green-400"></i> ${message}`;
-    document.body.appendChild(toast);
-
-    // Animate in
-    setTimeout(() => {
-        toast.classList.remove('translate-y-10', 'opacity-0');
-    }, 10);
-
-    // Animate out
-    setTimeout(() => {
-        toast.classList.add('translate-y-10', 'opacity-0');
-        setTimeout(() => toast.remove(), 300);
-    }, 3000);
-}
-
-// Modal Functions
+// Modal Functions Start
 let tempProductForModal = null;
 
 async function openModal(id) {
     const modal = document.getElementById('product-modal');
-    // Show spinner or loading state in modal if needed, but we will fetch first
 
     try {
         const response = await fetch(`${API_URL}/products/${id}`);
@@ -338,7 +326,6 @@ async function openModal(id) {
         document.getElementById('modal-rating').innerHTML = generateStars(product.rating.rate) + ` <span class="text-gray-400 text-xs ml-2">(${product.rating.count} reviews)</span>`;
 
         modal.classList.remove('hidden');
-        // Simple animation class add if wanted
     } catch (error) {
         console.error('Error fetching product details:', error);
     }
@@ -351,7 +338,8 @@ function closeModal() {
 
 function addToCartFromModal() {
     if (tempProductForModal) {
-        updateCart(tempProductForModal);
+        addToCart(tempProductForModal.id);
         closeModal();
     }
 }
+// Modal Functions End

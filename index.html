@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwiftCart - Loading...</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- DaisyUI (Optional but good for rapid UI) - Using Tailwind plugin via CDN if possible or just raw Tailwind -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5', // Indigo 600
+                        secondary: '#9333ea', // Purple 600
+                        accent: '#f59e0b', // Amber 500
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="bg-gray-50 text-gray-900 font-sans antialiased">
+
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md fixed w-full z-50 top-0 left-0">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" class="text-2xl font-bold text-primary flex items-center gap-2">
+                <i class="fa-solid fa-bag-shopping"></i> SwiftCart
+            </a>
+
+            <!-- Menu (Desktop) -->
+            <ul class="hidden md:flex space-x-8 font-medium">
+                <li><a href="#" class="hover:text-primary transition">Home</a></li>
+                <li><a href="#products-section" class="hover:text-primary transition">Products</a></li>
+                <li><a href="#about" class="hover:text-primary transition">About</a></li>
+                <li><a href="#contact" class="hover:text-primary transition">Contact</a></li>
+            </ul>
+
+            <!-- Icons (Cart & Mobile Menu) -->
+            <div class="flex items-center gap-4">
+                <div class="relative cursor-pointer hover:text-primary transition" id="cart-btn">
+                    <i class="fa-solid fa-cart-shopping text-xl"></i>
+                    <span id="cart-count"
+                        class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
+                </div>
+                <button id="mobile-menu-btn" class="md:hidden text-xl focus:outline-none">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Mobile Menu (Hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 p-4">
+            <a href="#" class="block py-2 hover:bg-gray-50 rounded">Home</a>
+            <a href="#products-section" class="block py-2 hover:bg-gray-50 rounded">Products</a>
+            <a href="#about" class="block py-2 hover:bg-gray-50 rounded">About</a>
+            <a href="#contact" class="block py-2 hover:bg-gray-50 rounded">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative bg-gray-900 text-white min-h-[600px] flex items-center mt-16"
+        style="background-image: url('./assets/banner-image.png'); background-size: cover; background-position: center;">
+        <div class="absolute inset-0 bg-black opacity-50"></div>
+        <div class="container mx-auto px-4 relative z-10 text-center md:text-left">
+            <h1 class="text-4xl md:text-6xl font-bold mb-4 leading-tight">Best Collection <br /> <span
+                    class="text-accent">For You</span></h1>
+            <p class="text-lg md:text-xl text-gray-300 mb-8 max-w-2xl">Discover the latest trends in fashion,
+                electronics, and more. Shop with confidence and style at SwiftCart.</p>
+            <a href="#products-section"
+                class="inline-block bg-primary hover:bg-secondary text-white font-bold py-3 px-8 rounded-full transition shadow-lg transform hover:scale-105">Shop
+                Now</a>
+        </div>
+    </header>
+
+
+
+
+    
+
+
+
+
+
+    <!-- Script -->
+    <script src="script.js"></script>
+</body>
+
+</html>
